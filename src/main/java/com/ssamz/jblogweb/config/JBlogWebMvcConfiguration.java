@@ -9,11 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class JBlogWebMvcConfiguration implements WebMvcConfigurer {
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthenticateInterceptor()).addPathPatterns("/","/post/**/");
-    }
-
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();

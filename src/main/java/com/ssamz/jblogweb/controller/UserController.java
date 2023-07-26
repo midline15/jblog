@@ -6,6 +6,7 @@ import com.ssamz.jblogweb.domain.RoleType;
 import com.ssamz.jblogweb.domain.User;
 import com.ssamz.jblogweb.exception.JBlogException;
 import com.ssamz.jblogweb.persistence.UserRepository;
+import com.ssamz.jblogweb.security.UserDetailsImpl;
 import com.ssamz.jblogweb.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -32,6 +34,11 @@ public class UserController {
 
     private final UserService userService;
     private final ModelMapper modelMapper;
+
+    @GetMapping("/auth/login")
+    public String login() {
+        return "system/login";
+    }
 
     @GetMapping("/auth/insertUser")
     public String insertUser() {
@@ -50,5 +57,17 @@ public class UserController {
         } else {
             return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), user.getUsername() + "님은 이미 회원입니다.");
         }
+    }
+
+    @GetMapping("/user/updateUser")
+    public String updateUser() {
+        return "user/updateUser";
+    }
+
+    @PutMapping("/user")
+    public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user, @AuthenticationPrincipal UserDetailsImpl principal) {
+        principal.setUser(userService.updateUser(user));
+
+        return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 수정 완료");
     }
 }

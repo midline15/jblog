@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div th:fragment="header">
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container-fluid">
@@ -8,7 +9,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mynavbar">
-                <th:block th:if="${session.principal == null}">
+                <th:block sec:authorize="isAnonymous()">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="/auth/login">로그인</a>
@@ -18,7 +19,7 @@
                         </li>
                     </ul>
                 </th:block>
-                <th:block th:unless="${session.principal == null}">
+                <th:block sec:authorize="isAuthenticated()">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="/user/updateUser">회원 상세</a>
