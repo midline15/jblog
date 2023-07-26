@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+    <br><br>
+    <div class="container border">
+        <br>
+        <div>
+            <h3 th:text="${post.title}"></h3>
+        </div>
+        <br>
+        <div>
+            <div th:utext="${post.content}"></div>
+        </div>
+
+        <br>
+        <div>
+            포스트 번호: <span id="id"><i th:text="${post.id}"></i></span><br>
+            작성자: <span><i th:text="${post.user.username}"></i></span>
+        </div>
+
+        <hr>
+        <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
+        <th:block th:if="${post.user.username == session.principal.username}">
+            <a th:href="@{/post/updatePost/{id} (id = ${post.id})}" class="btn btn-warning">수정하기</a>
+            <button id="btn-delete" class="btn btn-danger">삭제하기</button>
+        </th:block>
+        <br><br>
+
+        <div class="container mt-3" th:if="${!#lists.isEmpty(post.replyList)}">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th width="80%">내용</th>
+                    <th width="10%">작성자</th>
+                    <th width="10%">삭제</th>
+                </tr>
+                </thead>
+                <tbody th:each="reply : ${post.replyList}">
+                <tr>
+                    <td th:text="${reply.content}"></td>
+                    <td th:text="${reply.user.username}"></td>
+                    <td th:if="${reply.user.username == session.principal.username}">
+                        <button th:onclick="replyObject.deleteReply([[${post.id}]],[[${reply.id}]])">삭제</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="container mt-3">
+            <input type="hidden" id="postId" th:value="${post.id}">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><h4>댓글 목록</h4></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr align="right">
+                    <td>
+                        <textarea id="reply-content" rows="1" class="form-control"></textarea>
+                        <button id="btn-save-reply" class="btn btn-secondary">댓글 등록</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="/js/post.js"></script>
+    <script src="/js/reply.js"></script>
+</div>
+</html>
+
+

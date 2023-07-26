@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+  <div class="container mt-3">
+    <form>
+      <div class="mb-3">
+        <label for="title">Title:</label>
+        <input type="text" class="form-control" id="title" placeholder="Enter title" name="title">
+      </div>
+      <div class="mb-3">
+        <label for="content">Content:</label>
+        <textarea name="content" id="content" rows="5" class="form-control"></textarea>
+      </div>
+    </form>
+    <button id="btn-insert" class="btn btn-secondary">포스트 등록</button>
+  </div>
+  <script>
+    $(document).ready(function() {
+      $('#content').summernote({
+        height: 300
+      });
+    });
+  </script>
+  <script src="/js/post.js"></script>
+</div>
+</html>
+
+

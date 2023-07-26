@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+    <div class="container mt-3" th:if="${!#lists.isEmpty(postList)}">
+        <div class="card">
+            <div class="card-body" th:each="post : ${postList.content}">
+                <h4 class="card-title" th:text="${post.title}">포스트 제목</h4>
+                <a th:href="@{/post/{id} (id=${post.id})}" class="btn btn-secondary">상세보기</a>
+            </div>
+        </div>
+
+        <br>
+        <ul class="pagination justify-content-between">
+            <li class="page-item" th:classappend="${postList.first}?disabled">
+                <a class="page-link" th:href="@{/?page={page} (page = ${postList.number - 1})}">이전 페이지</a>
+            </li>
+            <li class="page-item" th:classappend="${postList.last}?disabled">
+                <a class="page-link" th:href="@{/?page={page} (page = ${postList.number + 1})}">다음 페이지</a>
+            </li>
+        </ul>
+    </div>
+</div>
+</html>
+
+
