@@ -1,5 +1,6 @@
 package com.ssamz.jblogweb.service;
 
+import com.ssamz.jblogweb.domain.OAuthType;
 import com.ssamz.jblogweb.domain.RoleType;
 import com.ssamz.jblogweb.domain.User;
 import com.ssamz.jblogweb.persistence.UserRepository;
@@ -36,6 +37,9 @@ public class UserService {
     public void insertUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(RoleType.USER);
+        if (user.getOauth() == null) {
+            user.setOauth(OAuthType.JBLOG);
+        }
         userRepository.save(user);
     }
 }

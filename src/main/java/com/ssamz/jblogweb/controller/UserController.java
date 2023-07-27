@@ -2,6 +2,7 @@ package com.ssamz.jblogweb.controller;
 
 import com.ssamz.jblogweb.DTO.ResponseDTO;
 import com.ssamz.jblogweb.DTO.UserDTO;
+import com.ssamz.jblogweb.domain.OAuthType;
 import com.ssamz.jblogweb.domain.RoleType;
 import com.ssamz.jblogweb.domain.User;
 import com.ssamz.jblogweb.exception.JBlogException;
@@ -11,6 +12,7 @@ import com.ssamz.jblogweb.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +36,11 @@ public class UserController {
 
     private final UserService userService;
     private final ModelMapper modelMapper;
+
+    @Value("${kakao.default.password}")
+    private String kakaoPassword;
+    @Value("google.default.password")
+    private String googlePassword;
 
     @GetMapping("/auth/login")
     public String login() {
@@ -66,6 +73,13 @@ public class UserController {
 
     @PutMapping("/user")
     public @ResponseBody ResponseDTO<?> updateUser(@RequestBody User user, @AuthenticationPrincipal UserDetailsImpl principal) {
+
+        if (principal.getUser().getOauth().equals(OAuthType.KAKAO)) {
+            user.setPassword(kakaoPassword);
+        } else if (principal.getUser().getOauth().equals(OAuthType.GOOGLE)) {
+            user.setPassword(googlePassword);
+        }
+
         principal.setUser(userService.updateUser(user));
 
         return new ResponseDTO<>(HttpStatus.OK.value(), user.getUsername() + " 수정 완료");

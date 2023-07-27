@@ -20,6 +20,9 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.H2Dialect
 
+  profiles:
+    include: oauth
+
 logging:
   level:
     org:
@@ -29,3 +32,10 @@ logging:
            descriptor:
              sql: trace
 
+kakao:
+  default:
+    password: kakao123
+
+google:
+  default:
+    password: google123
